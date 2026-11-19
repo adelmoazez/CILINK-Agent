@@ -1,5 +1,5 @@
 {
-  "resource": "https://example.test/wp-json/mcp/novamira-oauth",
+  "resource": "https://example.test/wp-json/mcp/cilink-agent-oauth",
   "authorization_servers": [
     "https://example.test"
   ],
