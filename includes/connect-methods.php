@@ -546,7 +546,7 @@ function novamira_oauth_chatgpt_steps(string $mcp_name, string $mcp_url): array
         [
             'title' => __('Create a plugin', domain: 'novamira'),
             'body' => __(
-                'In Settings, open Plugins and press the button in the top right to create a new plugin. Give it this name, or one you’ll recognize with "Novamira" in it:',
+                'In Settings, open Plugins and press the button in the top right to create a new plugin. Give it this name, or one you’ll recognize with "CILINK Agent" in it:',
                 domain: 'novamira',
             ),
             'copy' => $mcp_name,
