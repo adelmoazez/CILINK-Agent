@@ -255,7 +255,6 @@ add_action('admin_menu', callback: static function (): void {
     \Novamira\OAuth\Connections\register();
 });
 require_once __DIR__ . '/includes/specializations.php';
-require_once __DIR__ . '/includes/pro-upsell.php';
 require_once __DIR__ . '/includes/upload-link.php';
 require_once __DIR__ . '/includes/admin-access-link.php';
 require_once __DIR__ . '/includes/skills/bootstrap.php';
