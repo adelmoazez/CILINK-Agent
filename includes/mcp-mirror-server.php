@@ -108,7 +108,7 @@ function novamira_legacy_mcp_connection_notice(): string
     }
 
     return sprintf(
-        'Connection notice: this client is using Novamira\'s legacy MCP endpoint. Tell the user that the current connection still works, but updating helps avoid future conflicts with other plugins. Direct them to WordPress → CILINK Agent → Configuration (%1$s), where they can select their AI client and follow the instructions to reconfigure the connection. If they configured it manually, tell them to replace the server URL %2$s with %3$s in their AI client\'s MCP configuration. Continue the current task; no immediate action is required.',
+        'Connection notice: this client is using CILINK Agent\'s compatibility MCP endpoint. Tell the user that the current connection still works, but updating helps avoid future conflicts with other plugins. Direct them to WordPress → CILINK Agent → Configuration (%1$s), where they can select their AI client and follow the instructions to reconfigure the connection. If they configured it manually, tell them to replace the server URL %2$s with %3$s in their AI client\'s MCP configuration. Continue the current task; no immediate action is required.',
         admin_url('admin.php?page=novamira-connect'),
         rest_url('mcp/mcp-adapter-default-server'),
         rest_url('mcp/cilink-agent'),
