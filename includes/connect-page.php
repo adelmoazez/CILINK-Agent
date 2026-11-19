@@ -240,7 +240,7 @@ function novamira_build_mcp_server_name_default(
         replacement: '',
         subject: $site_host,
     ));
-    $site_slug = ltrim((string) preg_replace('/^cilink/', replacement: '', subject: $site_slug), characters: '-');
+    $site_slug = ltrim((string) preg_replace('/^(?:cilink|novamira)/', replacement: '', subject: $site_slug), characters: '-');
 
     $site_path = trim($site_path, characters: '/');
     if ($site_path === '') {
