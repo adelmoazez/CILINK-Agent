@@ -153,7 +153,7 @@ final class CompatibilityStartupTest extends TestCase
     {
         $metadata = \Novamira\OAuth\Endpoints\Discovery\protected_resource_document();
 
-        self::assertSame('https://example.test/wp-json/mcp/novamira-oauth', $metadata['resource']);
+        self::assertSame('https://example.test/wp-json/mcp/cilink-agent-oauth', $metadata['resource']);
         self::assertSame(['https://example.test'], $metadata['authorization_servers']);
         self::assertSame(['header'], $metadata['bearer_methods_supported']);
         self::assertSame(['full_access'], $metadata['scopes_supported']);
