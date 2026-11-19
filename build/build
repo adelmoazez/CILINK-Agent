@@ -1,8 +1,8 @@
 #!/bin/bash -e
 
-SLUG="novamira"
+SLUG="cilink-agent"
 BASEDIR=$(dirname $(dirname $(realpath "$0")))
-BUILD_BASE=$(mktemp -d /tmp/ooo-build-XXXXXX)
+BUILD_BASE=$(mktemp -d /tmp/cilink-build-XXXXXX)
 BUILD_DIR="$BUILD_BASE/$SLUG"
 
 if [ $# -ne 1 ]; then
@@ -15,13 +15,13 @@ VERSION="$1"
 mkdir -p "$BUILD_DIR"
 cd "$BASEDIR"
 
-# Build the Novamira Chat dashboard assets (src/chat -> includes/assets/chat)
+# Build the CILINK Agent Chat dashboard assets (src/chat -> includes/assets/chat)
 rm -rf includes/assets/chat
 rm -rf node_modules
 bun install --frozen-lockfile
 bun run build
 
-# Build Novamira Visual assets when present
+# Build CILINK Agent Visual assets when present
 if [ -d novamira-visual ]; then
 	cd novamira-visual
 	rm -rf dist
