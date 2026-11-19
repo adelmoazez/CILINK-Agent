@@ -6,7 +6,7 @@
 declare(strict_types=1);
 
 /**
- * Mirrors of the canonical Novamira MCP server (the legacy alias and the OAuth endpoint).
+ * Mirrors of the canonical CILINK Agent MCP server (the legacy alias and the OAuth endpoint).
  */
 
 if (!defined('ABSPATH')) {
@@ -14,12 +14,12 @@ if (!defined('ABSPATH')) {
 }
 
 /**
- * Keep old Novamira connections on our transport when another adapter registers the same URL.
+ * Keep old CILINK Agent connections on our transport when another adapter registers the same URL.
  *
  * WordPress merges handlers for a route and uses the first matching HTTP method. Both adapters
  * register their transports on rest_api_init:16, so registration order otherwise decides which
  * server answers. Reorder the completed route map, retaining each handler's methods and permission
- * callback. Without an enabled Novamira transport, the public adapter's handlers stay unchanged.
+ * callback. Without an enabled CILINK Agent transport, the public adapter's handlers stay unchanged.
  *
  * @param array<string, mixed> $endpoints
  * @return array<string, mixed>
@@ -54,7 +54,7 @@ function novamira_prioritize_legacy_mcp_endpoint(array $endpoints): array
 
 add_filter('rest_endpoints', callback: 'novamira_prioritize_legacy_mcp_endpoint', priority: PHP_INT_MAX);
 
-/** Whether a REST handler belongs to Novamira's HTTP transport. */
+/** Whether a REST handler belongs to CILINK Agent's HTTP transport. */
 function novamira_is_mcp_http_handler(mixed $handler): bool
 {
     /** @var mixed $callback */
@@ -108,10 +108,10 @@ function novamira_legacy_mcp_connection_notice(): string
     }
 
     return sprintf(
-        'Connection notice: this client is using Novamira\'s legacy MCP endpoint. Tell the user that the current connection still works, but updating helps avoid future conflicts with other plugins. Direct them to WordPress → Novamira → Configuration (%1$s), where they can select their AI client and follow the instructions to reconfigure the connection. If they configured it manually, tell them to replace the server URL %2$s with %3$s in their AI client\'s MCP configuration. Continue the current task; no immediate action is required.',
+        'Connection notice: this client is using Novamira\'s legacy MCP endpoint. Tell the user that the current connection still works, but updating helps avoid future conflicts with other plugins. Direct them to WordPress → CILINK Agent → Configuration (%1$s), where they can select their AI client and follow the instructions to reconfigure the connection. If they configured it manually, tell them to replace the server URL %2$s with %3$s in their AI client\'s MCP configuration. Continue the current task; no immediate action is required.',
         admin_url('admin.php?page=novamira-connect'),
         rest_url('mcp/mcp-adapter-default-server'),
-        rest_url('mcp/novamira'),
+        rest_url('mcp/cilink-agent'),
     );
 }
 
@@ -124,7 +124,7 @@ add_filter(
 add_filter('rest_request_after_callbacks', callback: 'novamira_leave_mcp_request', priority: PHP_INT_MAX);
 
 /**
- * Create an MCP server that mirrors the canonical Novamira server — same tools, resources, and
+ * Create an MCP server that mirrors the canonical CILINK Agent server — same tools, resources, and
  * prompts — under a different id and route. Shared by the legacy alias and the OAuth endpoint so
  * neither drifts from the default server's exposed abilities.
  */
