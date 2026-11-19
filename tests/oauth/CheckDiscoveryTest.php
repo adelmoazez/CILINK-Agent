@@ -156,10 +156,10 @@ use function Novamira\Troubleshoot\Checks\well_known_htaccess_failure;
 final class CheckDiscoveryTest extends TestCase
 {
     private const PR_APPEND = 'https://example.test/.well-known/oauth-protected-resource';
-    private const PR_INSERT = 'https://example.test/.well-known/oauth-protected-resource/wp-json/mcp/novamira-oauth';
+    private const PR_INSERT = 'https://example.test/.well-known/oauth-protected-resource/wp-json/mcp/cilink-agent-oauth';
     private const AS_OIDC = 'https://example.test/.well-known/openid-configuration';
     private const AS_OAUTH = 'https://example.test/.well-known/oauth-authorization-server';
-    private const RESOURCE = 'https://example.test/wp-json/mcp/novamira-oauth';
+    private const RESOURCE = 'https://example.test/wp-json/mcp/cilink-agent-oauth';
     private const ISSUER = 'https://example.test';
     private const SITEGROUND = [
         'id' => 'siteground',
@@ -307,7 +307,7 @@ final class CheckDiscoveryTest extends TestCase
     public function testWrongResourceValueFails(): void
     {
         $map = $this->valid_map();
-        $map[self::PR_APPEND] = $this->json(['resource' => 'https://evil.example/wp-json/mcp/novamira-oauth']);
+        $map[self::PR_APPEND] = $this->json(['resource' => 'https://evil.example/wp-json/mcp/cilink-agent-oauth']);
         self::assertSame('fail', $this->run_discovery($map));
     }
 
