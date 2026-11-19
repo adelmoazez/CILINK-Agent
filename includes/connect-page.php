@@ -86,7 +86,7 @@ function novamira_handle_settings_form(): void
 function novamira_handle_admin_bar_toggle(): void
 {
     if (!novamira_current_user_can_manage()) {
-        wp_die(esc_html__('You are not allowed to manage Novamira settings.', domain: 'novamira'));
+        wp_die(esc_html__('You are not allowed to manage CILINK Agent settings.', domain: 'novamira'));
     }
 
     check_admin_referer('novamira_toggle_ai_abilities');
@@ -146,7 +146,7 @@ function novamira_render_enable_toggle(): void
         </p>
         <p class="description" style="margin:0 0 14px;">
             <?php esc_html_e(
-                'Use Novamira with a capable AI model and set your AI tool to ask for confirmation before every action. Read what the agent is about to do before approving.',
+                'Use CILINK Agent with a capable AI model and set your AI tool to ask for confirmation before every action. Read what the agent is about to do before approving.',
                 domain: 'novamira',
             ); ?>
         </p>
@@ -232,7 +232,7 @@ function novamira_build_mcp_server_name_default(
     string $site_host,
     ?int $site_port,
     string $site_path,
-    string $prefix = 'novamira-',
+    string $prefix = 'cilink-',
 ): string {
     $slug_budget = max(0, 25 - strlen($prefix));
     $site_slug = novamira_mcp_server_name_slug((string) preg_replace(
@@ -240,7 +240,7 @@ function novamira_build_mcp_server_name_default(
         replacement: '',
         subject: $site_host,
     ));
-    $site_slug = ltrim((string) preg_replace('/^novamira/', replacement: '', subject: $site_slug), characters: '-');
+    $site_slug = ltrim((string) preg_replace('/^cilink/', replacement: '', subject: $site_slug), characters: '-');
 
     $site_path = trim($site_path, characters: '/');
     if ($site_path === '') {
@@ -402,7 +402,7 @@ function novamira_handle_create_password()
     $user_id = get_current_user_id();
     $raw_name = $_POST['novamira_password_name'] ?? '';
     $input_name = is_string($raw_name) ? trim($raw_name) : '';
-    $app_name = $input_name !== '' ? 'Novamira: ' . $input_name : 'Novamira';
+    $app_name = $input_name !== '' ? 'CILINK Agent: ' . $input_name : 'CILINK Agent';
 
     // Avoid duplicate names — append a counter if one already exists.
     $existing = WP_Application_Passwords::get_user_application_passwords($user_id);
@@ -454,7 +454,7 @@ function novamira_handle_revoke_password(string $redirect_page = 'novamira-conne
 }
 
 /**
- * Return the current user's Novamira Application Passwords.
+ * Return the current user's CILINK Agent Application Passwords.
  *
  * @return array<int, array<string, mixed>>
  */
@@ -601,11 +601,11 @@ function novamira_render_ai_client_chooser(): void
 {
     $name_placeholder = '__NOVAMIRA_MCP_NAME__';
     $oauth_configs = novamira_with_generic_fallback(novamira_build_oauth_configs(
-        rest_url('mcp/novamira-oauth'),
+        rest_url('mcp/cilink-agent-oauth'),
         $name_placeholder,
     ));
     $password_configs = novamira_with_generic_fallback(novamira_build_configs(
-        rest_url: rest_url('mcp/novamira'),
+        rest_url: rest_url('mcp/cilink-agent'),
         username: wp_get_current_user()->user_login,
         // This is the visible documentation placeholder, never a credential.
         // @mago-expect lint:no-literal-password
@@ -701,7 +701,7 @@ function novamira_render_ai_client_chooser(): void
     (function () {
         var storageKey = 'novamiraSelectedAiClient';
         var oauthUnsupported = <?php echo
-            wp_json_encode(__('%s does not support OAuth authentication with Novamira.', domain: 'novamira'))
+            wp_json_encode(__('%s does not support OAuth authentication with CILINK Agent.', domain: 'novamira'))
         ; ?>;
         var passwordUnsupported = <?php echo
             wp_json_encode(__(
@@ -893,7 +893,7 @@ function novamira_hosting_support_email(string $authentication_context = 'both')
     return sprintf(
         /* translators: 1: site URL, 2: OAuth protected-resource URL, 3: current-user REST URL, 4: description of the failing authentication method */
         __(
-            "Hello,\n\nMy WordPress site at %1\$s runs a plugin called Novamira (novamira.ai), which lets AI clients such as Claude and ChatGPT connect to the site over the WordPress REST API. The connection is direct between the AI client and my site: the plugin is installed on my own WordPress, and nothing passes through any Novamira server. %4\$s I have verified the WordPress side already: the REST API answers, the endpoints are installed, and the site responds correctly to requests made from the server itself. The requests that fail are the ones arriving from outside, from datacenter addresses and with non-browser user agents, which is exactly what an AI client sends. Claude.ai, for example, can send these server-to-server requests from Anthropic infrastructure using a generic Python HTTP client signature such as python-httpx. A firewall can therefore classify them as automated bot traffic even though they are legitimate requests from the AI client.\n\nThere are three things I would ask you to check for my site.\n\nFirst, the Authorization header must reach PHP rather than being stripped by the web server or the proxy. WordPress Application Passwords are sent as HTTP Basic authentication and OAuth tokens as a Bearer header, so if that header is removed, every authenticated request is seen by WordPress as anonymous and the connection fails with a permission error. On Apache this usually means passing HTTP_AUTHORIZATION through, and on nginx or a proxy layer it means not dropping the header.\n\nSecond, these paths need to stay dynamic and uncached, with no redirects, bot challenges, JavaScript or CAPTCHA checks, IP-reputation or bot-score blocking, or rate limits that reject these requests (403 or 429): the whole REST API path /wp-json/ and its subpaths, plus /.well-known/oauth-authorization-server and /.well-known/oauth-protected-resource, including any subpath of those two. To be concrete about the traffic involved, the AI client connects to /wp-json/mcp/novamira-oauth when it authenticates with OAuth and to /wp-json/mcp/novamira when it uses an Application Password, and the OAuth sign-in itself also calls /wp-json/novamira/v1/oauth/. I am asking for the whole /wp-json/ path rather than only those, because the REST prefix changes on subdirectory installs and on sites using plain permalinks.\n\nThird, if a CDN, WAF or bot protection sits in front of the site, please make only the changes listed in the second point, by path rather than by User-Agent or IP. This is not a request to disable or bypass the WAF. Keep SQL injection, XSS, exploit-signature inspection, and every other protection active on these paths and the rest of the site.\n\nIf it helps your investigation, two quick tests: a plain GET to %2\$s should return application/json with HTTP 200, and a GET to %3\$s sent with HTTP Basic credentials should return the user rather than a 401. Anything else, a redirect, an HTML page, a 403 or a challenge page, is the failure I am reporting.\n\nIf your team would like to reproduce the behaviour on your own infrastructure, the free version of the plugin can be downloaded at no cost from novamira.ai and installed on any test site on your platform. It ships a Troubleshoot page that runs these same checks and prints exactly which layer is answering, which may be quicker than working from my description alone.\n\nThank you for your help.",
+            "Hello,\n\nMy WordPress site at %1\$s runs a plugin called CILINK Agent (an independent distribution of Novamira Free), which lets AI clients such as Claude and ChatGPT connect to the site over the WordPress REST API. The connection is direct between the AI client and my site: the plugin is installed on my own WordPress, and nothing passes through any CILINK Agent server. %4\$s I have verified the WordPress side already: the REST API answers, the endpoints are installed, and the site responds correctly to requests made from the server itself. The requests that fail are the ones arriving from outside, from datacenter addresses and with non-browser user agents, which is exactly what an AI client sends. Claude.ai, for example, can send these server-to-server requests from Anthropic infrastructure using a generic Python HTTP client signature such as python-httpx. A firewall can therefore classify them as automated bot traffic even though they are legitimate requests from the AI client.\n\nThere are three things I would ask you to check for my site.\n\nFirst, the Authorization header must reach PHP rather than being stripped by the web server or the proxy. WordPress Application Passwords are sent as HTTP Basic authentication and OAuth tokens as a Bearer header, so if that header is removed, every authenticated request is seen by WordPress as anonymous and the connection fails with a permission error. On Apache this usually means passing HTTP_AUTHORIZATION through, and on nginx or a proxy layer it means not dropping the header.\n\nSecond, these paths need to stay dynamic and uncached, with no redirects, bot challenges, JavaScript or CAPTCHA checks, IP-reputation or bot-score blocking, or rate limits that reject these requests (403 or 429): the whole REST API path /wp-json/ and its subpaths, plus /.well-known/oauth-authorization-server and /.well-known/oauth-protected-resource, including any subpath of those two. To be concrete about the traffic involved, the AI client connects to /wp-json/mcp/cilink-agent-oauth when it authenticates with OAuth and to /wp-json/mcp/cilink-agent when it uses an Application Password, and the OAuth sign-in itself also calls /wp-json/novamira/v1/oauth/. I am asking for the whole /wp-json/ path rather than only those, because the REST prefix changes on subdirectory installs and on sites using plain permalinks.\n\nThird, if a CDN, WAF or bot protection sits in front of the site, please make only the changes listed in the second point, by path rather than by User-Agent or IP. This is not a request to disable or bypass the WAF. Keep SQL injection, XSS, exploit-signature inspection, and every other protection active on these paths and the rest of the site.\n\nIf it helps your investigation, two quick tests: a plain GET to %2\$s should return application/json with HTTP 200, and a GET to %3\$s sent with HTTP Basic credentials should return the user rather than a 401. Anything else, a redirect, an HTML page, a 403 or a challenge page, is the failure I am reporting.\n\nIf your team would like to reproduce the behaviour on your own infrastructure, the free version of the plugin can be downloaded from https://github.com/adelmoazez/CILINK-Agent/releases and installed on any test site on your platform. It ships a Troubleshoot page that runs these same checks and prints exactly which layer is answering, which may be quicker than working from my description alone.\n\nThank you for your help.",
             domain: 'novamira',
         ),
         $site_url,
@@ -1081,7 +1081,7 @@ function novamira_render_method_chooser(
             <p><?php printf(
                 /* translators: 1: detected hosting provider name, 2: detected edge/security layer name */
                 esc_html__(
-                    'Novamira is direct by design: no credentials, site content, or requests pass through Novamira servers. With OAuth, the AI client opens the connection directly to this site. On Claude.ai, for example, the request originates on Anthropic servers and often uses a generic Python HTTP signature such as python-httpx. Novamira detected %1$s, which places %2$s in front of WordPress; that security layer can classify this legitimate server-to-server request as bot traffic and block or challenge it before WordPress or PHP receives it.',
+                    'CILINK Agent is direct by design: no credentials, site content, or requests pass through CILINK Agent servers. With OAuth, the AI client opens the connection directly to this site. On Claude.ai, for example, the request originates on Anthropic servers and often uses a generic Python HTTP signature such as python-httpx. CILINK Agent detected %1$s, which places %2$s in front of WordPress; that security layer can classify this legitimate server-to-server request as bot traffic and block or challenge it before WordPress or PHP receives it.',
                     domain: 'novamira',
                 ),
                 esc_html($hosting_name),
@@ -1090,7 +1090,7 @@ function novamira_render_method_chooser(
             <p><?php printf(
                 /* translators: %s: detected hosting provider name */
                 esc_html__(
-                    'For clients that support it, Application Password uses the local @automattic/mcp-wordpress-remote bridge launched by npx. It contacts WordPress from the environment where the AI client runs instead of from the AI provider’s cloud infrastructure, avoiding this type of bot classification. The bridge is not a Novamira service, and the traffic still never passes through Novamira servers. Claude.ai only supports OAuth, so for Claude.ai contact %s support and ask them to keep /.well-known/oauth-* and the whole /wp-json/ path dynamic and uncached, with no redirects, bot challenges, JavaScript or CAPTCHA checks, IP-reputation or bot-score blocking, or rate limits that reject these requests (403 or 429). The change should be path-based, not User-Agent/IP-based. Keep SQL injection, XSS, exploit-signature inspection, and every other protection active.',
+                    'For clients that support it, Application Password uses the local @automattic/mcp-wordpress-remote bridge launched by npx. It contacts WordPress from the environment where the AI client runs instead of from the AI provider’s cloud infrastructure, avoiding this type of bot classification. The bridge is not a CILINK Agent service, and the traffic still never passes through CILINK Agent servers. Claude.ai only supports OAuth, so for Claude.ai contact %s support and ask them to keep /.well-known/oauth-* and the whole /wp-json/ path dynamic and uncached, with no redirects, bot challenges, JavaScript or CAPTCHA checks, IP-reputation or bot-score blocking, or rate limits that reject these requests (403 or 429). The change should be path-based, not User-Agent/IP-based. Keep SQL injection, XSS, exploit-signature inspection, and every other protection active.',
                     domain: 'novamira',
                 ),
                 esc_html($hosting_name),
@@ -1573,7 +1573,7 @@ function novamira_render_oauth_config_section(string $rest_url): void
         function updateOauthNameWarning(value) {
             document.getElementById('novamira-oauth-name-warning').style.display = value.length >= 25 ? 'block' : 'none';
             var trimmed = value.trim();
-            var missing = trimmed.length > 0 && trimmed.toLowerCase().indexOf('novamira') === -1;
+            var missing = trimmed.length > 0 && trimmed.toLowerCase().indexOf('cilink-agent') === -1;
             document.getElementById('novamira-oauth-name-suggestion').style.display = missing ? 'block' : 'none';
         }
 
@@ -1678,7 +1678,7 @@ function novamira_render_cli_config_section(): void
             'password' => sprintf(
                 /* translators: 1: detected hosting provider name, 2: detected edge/security layer name */
                 __(
-                    'This site is hosted on %1$s behind %2$s. Novamira CLI uses OAuth directly and has no MCP bridge, so requests originate from the environment where this coding agent runs. If the diagnostics show that requests are blocked before reaching WordPress, explain that cloud-hosted agent traffic may be filtered by the hosting layer and direct me to the hosting support template on the Novamira Configuration page.',
+                    'This site is hosted on %1$s behind %2$s. Novamira CLI uses OAuth directly and has no MCP bridge, so requests originate from the environment where this coding agent runs. If the diagnostics show that requests are blocked before reaching WordPress, explain that cloud-hosted agent traffic may be filtered by the hosting layer and direct me to the hosting support template on the CILINK Agent Configuration page.',
                     domain: 'novamira',
                 ),
                 $hosting['name'],
@@ -1997,7 +1997,7 @@ function novamira_render_password_step(
             />
             <p class="description" style="margin-top:4px;">
                 <?php esc_html_e(
-                    'A label to identify this credential later. Leave blank to use "Novamira".',
+                    'A label to identify this credential later. Leave blank to use "CILINK Agent".',
                     domain: 'novamira',
                 ); ?>
             </p>
@@ -2112,7 +2112,7 @@ function novamira_build_paste_to_agent_paragraph(
  */
 function novamira_paste_manual_fallback_line(): string
 {
-    return 'If you cannot modify the config of this AI tool from here, tell me to expand "Manual configuration for your AI tool" on the Novamira Configuration page and copy the snippet manually.';
+    return 'If you cannot modify the config of this AI tool from here, tell me to expand "Manual configuration for your AI tool" on the CILINK Agent Configuration page and copy the snippet manually.';
 }
 
 /**
@@ -2177,7 +2177,7 @@ function novamira_build_mcpb_manifest(
     }
 
     $site_name = novamira_unbranded_site_name(get_bloginfo('name'));
-    $display_name = $site_name !== '' ? 'Novamira — ' . $site_name : 'Novamira';
+    $display_name = $site_name !== '' ? 'CILINK Agent — ' . $site_name : 'CILINK Agent';
 
     return [
         'manifest_version' => '0.3',
@@ -2188,7 +2188,7 @@ function novamira_build_mcpb_manifest(
             'Full WordPress control for your AI agent. Runs real PHP, queries the database, edits files — on your dev or staging site.',
             domain: 'novamira',
         ),
-        'author' => ['name' => 'Novamira'],
+        'author' => ['name' => 'CILINK Agent'],
         'server' => [
             // entry_point is required by the MCPB schema even though the server
             // is launched via mcp_config (npx); the bundled stub is never run.
@@ -3008,8 +3008,8 @@ function novamira_render_config_section(string $rest_url, string $username, stri
 
             var suggestion = document.getElementById('novamira-name-suggestion');
             var trimmed = value.trim();
-            var missingNovamira = trimmed.length > 0 && trimmed.toLowerCase().indexOf('novamira') === -1;
-            suggestion.style.display = missingNovamira ? 'block' : 'none';
+            var missingCILINK Agent = trimmed.length > 0 && trimmed.toLowerCase().indexOf('novamira') === -1;
+            suggestion.style.display = missingCILINK Agent ? 'block' : 'none';
         }
 
         window.novamiraUpdateName = function (value) {
@@ -3222,7 +3222,7 @@ function novamira_render_mcp_dependency_inline_notice(?WP_Error $dependency_erro
 
     ?>
     <div class="novamira-mcp-error-panel" role="alert">
-        <h2><?php esc_html_e('Novamira cannot expose MCP', domain: 'novamira'); ?></h2>
+        <h2><?php esc_html_e('CILINK Agent cannot expose MCP', domain: 'novamira'); ?></h2>
         <p><?php echo esc_html($dependency_error->get_error_message()); ?></p>
     </div>
     <?php
