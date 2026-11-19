@@ -51,6 +51,7 @@ final class ConnectorLinkTest extends TestCase
         self::assertSame('CILINK Agent', novamira_build_connector_display_name('   '));
         self::assertSame('CILINK Agent', novamira_build_connector_display_name('&nbsp;'));
         self::assertSame('CILINK Agent - Demo', novamira_build_connector_display_name('Novamira Demo'));
+        self::assertSame('CILINK Agent - Demo', novamira_build_connector_display_name('CILINK Agent — Demo'));
         self::assertSame('CILINK Agent', novamira_build_connector_display_name('Novamira'));
     }
 
