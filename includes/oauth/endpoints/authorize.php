@@ -40,14 +40,14 @@ function register(): void
 
 /**
  * Runs on load-{hook}, before any admin output. admin.php has already enforced login
- * (auth_redirect) and the Novamira management capability, so the current user is
+ * (auth_redirect) and the CILINK Agent management capability, so the current user is
  * authenticated and authorized here.
  */
 function handle(): void
 {
     if (!\novamira_current_user_can_manage()) {
         wp_die(
-            esc_html__('You are not allowed to authorize Novamira applications.', domain: 'novamira'),
+            esc_html__('You are not allowed to authorize CILINK Agent applications.', domain: 'novamira'),
             title: '',
             args: [
                 'response' => 403,
@@ -131,7 +131,7 @@ function handle(): void
     ]);
     if ($token === null) {
         wp_die(
-            esc_html__('Novamira could not persist the authorization request. Please try again.', domain: 'novamira'),
+            esc_html__('CILINK Agent could not persist the authorization request. Please try again.', domain: 'novamira'),
             title: '',
             args: ['response' => 500],
         );
@@ -193,7 +193,7 @@ function validate_client_redirect(ClientEntityInterface $client, string $redirec
  * the referer through wp_validate_redirect(), which applies `allowed_redirect_hosts` again. Without
  * the guard that cycle never ends on a request carrying a referer. A re-entered call returns the
  * list unchanged and the outer call completes it. admin_url() stays the source of the host, rather
- * than the `siteurl` option, so that the host allowed is the one on the addresses Novamira redirects
+ * than the `siteurl` option, so that the host allowed is the one on the addresses CILINK Agent redirects
  * to, including when a filter changes it. The host is not memoized because switch_to_blog() can
  * change it within a request.
  */
