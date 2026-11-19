@@ -38,7 +38,7 @@ final class EarlyRewriteResourceIdentifierTest extends TestCase
 
         $result = \Novamira\OAuth\resource_identifier();
 
-        self::assertSame('https://example.test/wp-json/mcp/novamira-oauth', $result);
+        self::assertSame('https://example.test/wp-json/mcp/cilink-agent-oauth', $result);
     }
 
     public function testIndexPermalinksWithoutRewriteObjectDoNotCrash(): void
@@ -49,7 +49,7 @@ final class EarlyRewriteResourceIdentifierTest extends TestCase
 
         $result = \Novamira\OAuth\resource_identifier();
 
-        self::assertSame('https://example.test/index.php/wp-json/mcp/novamira-oauth', $result);
+        self::assertSame('https://example.test/index.php/wp-json/mcp/cilink-agent-oauth', $result);
     }
 
     #[DataProvider('permalinkStructures')]
@@ -135,7 +135,7 @@ final class EarlyRewriteResourceIdentifierTest extends TestCase
             $GLOBALS['wp_rewrite'] ?? null,
             'Guard must seed $wp_rewrite when multisite blog option is truthy',
         );
-        self::assertSame('https://example.test/wp-json/mcp/novamira-oauth', $result);
+        self::assertSame('https://example.test/wp-json/mcp/cilink-agent-oauth', $result);
     }
 
     public function testMultisiteBothFalsyDoesNotSeedRewriteObject(): void
@@ -159,10 +159,10 @@ final class EarlyRewriteResourceIdentifierTest extends TestCase
     public static function permalinkStructures(): array
     {
         return [
-            'pretty' => ['/%postname%/', 'https://example.test/wp-json/mcp/novamira-oauth'],
+            'pretty' => ['/%postname%/', 'https://example.test/wp-json/mcp/cilink-agent-oauth'],
             'index-based' => [
                 '/index.php/%postname%/',
-                'https://example.test/index.php/wp-json/mcp/novamira-oauth',
+                'https://example.test/index.php/wp-json/mcp/cilink-agent-oauth',
             ],
         ];
     }
