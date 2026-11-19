@@ -1,19 +1,20 @@
 <?php
 
 // SPDX-FileCopyrightText: 2026 Ovation S.r.l. <dev@novamira.ai>
+// SPDX-FileCopyrightText: 2026 CILINK contributors
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 declare(strict_types=1);
 
 /**
- * Plugin Name: Novamira
- * Plugin URI: https://novamira.ai
- * Description: MCP server that gives AI agents full access to WordPress through PHP execution and filesystem operations. For development and staging environments only.
- * Version: 1.12.16
+ * Plugin Name: CILINK Agent
+ * Plugin URI: https://github.com/adelmoazez/CILINK-Agent
+ * Description: Independent CILINK distribution of CILINK Agent Free. Provides MCP and OAuth access to WordPress. For development and staging environments only.
+ * Version: 1.12.16.1
  * Requires at least: 6.9
  * Requires PHP: 8.0
- * Author: Dynamic.ooo
- * Author URI: https://novamira.ai
+ * Author: CILINK (derived from CILINK Agent Free)
+ * Author URI: https://cilink.ir
  * License: AGPL-3.0-or-later
  * License URI: https://www.gnu.org/licenses/agpl-3.0.html
  * Text Domain: novamira
@@ -55,7 +56,7 @@ function novamira_load_bundled_dependencies()
 {
     if (!file_exists(NOVAMIRA_VENDOR_AUTOLOAD) || !file_exists(NOVAMIRA_MCP_AUTOLOAD)) {
         return new WP_Error('novamira_missing_vendor', __(
-            'This Novamira installation is incomplete, so AI clients cannot connect to this site. Download the official Novamira plugin ZIP from novamira.ai, then reinstall it from Plugins → Add Plugin → Upload Plugin. Do not use a GitHub “Source code” ZIP.',
+            'This CILINK Agent installation is incomplete, so AI clients cannot connect to this site. Download the official CILINK Agent plugin ZIP from the CILINK Agent GitHub releases, then reinstall it from Plugins → Add Plugin → Upload Plugin. Do not use a GitHub “Source code” ZIP.',
             domain: 'novamira',
         ));
     }
@@ -66,7 +67,7 @@ function novamira_load_bundled_dependencies()
     } catch (\Throwable $e) {
         return new WP_Error('novamira_autoload_failed', sprintf(
             __(
-                'Novamira could not load its required files, so AI clients cannot connect to this site. Reinstall Novamira using the official plugin ZIP from novamira.ai. Technical error: %s',
+                'CILINK Agent could not load its required files, so AI clients cannot connect to this site. Reinstall CILINK Agent using the official plugin ZIP from novamira.ai. Technical error: %s',
                 domain: 'novamira',
             ),
             $e->getMessage(),
@@ -76,7 +77,7 @@ function novamira_load_bundled_dependencies()
     if (!class_exists(NOVAMIRA_MCP_ADAPTER_CLASS)) {
         return new WP_Error('novamira_mcp_adapter_missing', sprintf(
             __(
-                'This Novamira installation is incomplete, so AI clients cannot connect to this site. Reinstall Novamira using the official plugin ZIP from novamira.ai. Missing component: %s',
+                'This CILINK Agent installation is incomplete, so AI clients cannot connect to this site. Reinstall CILINK Agent using the official plugin ZIP from novamira.ai. Missing component: %s',
                 domain: 'novamira',
             ),
             NOVAMIRA_MCP_ADAPTER_CLASS,
@@ -121,7 +122,7 @@ function novamira_mcp_dependency_error(?WP_Error $error = null)
 }
 
 /**
- * Whether the bundled MCP Adapter is available for Novamira to initialize.
+ * Whether the bundled MCP Adapter is available for CILINK Agent to initialize.
  */
 function novamira_is_mcp_adapter_available(): bool
 {
@@ -129,7 +130,7 @@ function novamira_is_mcp_adapter_available(): bool
 }
 
 /**
- * Show a persistent admin error when Novamira cannot expose MCP.
+ * Show a persistent admin error when CILINK Agent cannot expose MCP.
  */
 function novamira_render_mcp_dependency_notice(): void
 {
@@ -182,7 +183,7 @@ function novamira_register_missing_mcp_endpoint(): void
         'status' => 500,
     ]);
 
-    foreach (['novamira', 'mcp-adapter-default-server'] as $route_slug) {
+    foreach (['cilink-agent', 'mcp-adapter-default-server'] as $route_slug) {
         if (array_key_exists('/mcp/' . $route_slug, $routes)) {
             continue;
         }
@@ -210,7 +211,7 @@ function novamira_initialize_mcp_adapter(): bool
         novamira_set_mcp_dependency_error(
             new WP_Error('novamira_mcp_adapter_init_failed', sprintf(
                 __(
-                    'Novamira found the MCP Adapter, but it failed during initialization. Novamira will not register an MCP endpoint. Error: %s',
+                    'CILINK Agent found the MCP Adapter, but it failed during initialization. CILINK Agent will not register an MCP endpoint. Error: %s',
                     domain: 'novamira',
                 ),
                 $e->getMessage(),
@@ -243,7 +244,7 @@ require_once __DIR__ . '/includes/design-authority.php';
 require_once __DIR__ . '/includes/features/bootstrap.php';
 require_once __DIR__ . '/includes/admin-notices.php';
 require_once __DIR__ . '/includes/abilities/bootstrap.php';
-require_once __DIR__ . '/includes/updater.php';
+// Independent CILINK distribution: the upstream license-server update check is intentionally disabled.
 require_once __DIR__ . '/includes/admin-page.php';
 require_once __DIR__ . '/includes/uninstall-review.php';
 register_activation_hook(__FILE__, callback: 'novamira_clear_uninstall_plan');
@@ -384,7 +385,7 @@ function novamira_inject_custom_instructions(mixed $instructions): mixed
 add_filter('novamira_discover_abilities_instructions', callback: 'novamira_inject_custom_instructions', priority: 6);
 
 /**
- * Add the Novamira AI Abilities status and toggle to the WordPress admin bar.
+ * Add the CILINK Agent AI Abilities status and toggle to the WordPress admin bar.
  */
 function novamira_register_admin_bar_toggle(\WP_Admin_Bar $wp_admin_bar): void
 {
@@ -405,9 +406,9 @@ function novamira_register_admin_bar_toggle(\WP_Admin_Bar $wp_admin_bar): void
     $wp_admin_bar->add_node(\Novamira\ReadMode\admin_bar_node([
         'id' => 'novamira-mcp-status',
         'title' => match (true) {
-            $active => esc_html__('Novamira ON', domain: 'novamira'),
-            $configured_enabled => esc_html__('Novamira ERROR', domain: 'novamira'),
-            default => esc_html__('Novamira', domain: 'novamira'),
+            $active => esc_html__('CILINK Agent ON', domain: 'novamira'),
+            $configured_enabled => esc_html__('CILINK Agent ERROR', domain: 'novamira'),
+            default => esc_html__('CILINK Agent', domain: 'novamira'),
         },
         'href' => admin_url('admin.php?page=novamira-connect'),
         'meta' => [
@@ -538,7 +539,7 @@ add_filter(
 );
 
 // Suppress noisy admin notices on the Configuration page via CSS: hide notices that are not
-// emitted by Novamira or Novamira Pro. Cheap and side-effect free, unlike iterating $wp_filter
+// emitted by CILINK Agent or Novamira Pro. Cheap and side-effect free, unlike iterating $wp_filter
 // with Reflection (which causes memory blow-ups when Query Monitor captures every remove_action).
 add_action('admin_head', static function () {
     if (($_GET['page'] ?? null) !== 'novamira-connect') {
@@ -626,11 +627,11 @@ add_action(
         // Top-level menu item (shows the Connect page).
         add_menu_page(
             page_title: __('Configuration', domain: 'novamira'),
-            menu_title: 'Novamira',
+            menu_title: 'CILINK Agent',
             capability: novamira_manage_capability(),
             menu_slug: 'novamira-connect',
             callback: 'novamira_render_connect_page',
-            // Official Novamira N, encoded so WordPress applies its native SVG menu sizing.
+            // Official CILINK Agent N, encoded so WordPress applies its native SVG menu sizing.
             icon_url: 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyBpZD0iTGF5ZXJfMiIgZGF0YS1uYW1lPSJMYXllciAyIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii0xNSAtMTUgMTQ4LjU4IDE0OC41OSIgd2lkdGg9IjIwIiBoZWlnaHQ9IjIwIj4KICA8ZGVmcz4KICAgIDxzdHlsZT4KICAgICAgLmNscy0xIHsKICAgICAgICBmaWxsOiAjZmZmOwogICAgICB9CiAgICA8L3N0eWxlPgogIDwvZGVmcz4KICA8ZyBpZD0iTGF5ZXJfMS0yIiBkYXRhLW5hbWU9IkxheWVyIDEiPgogICAgPHBhdGggY2xhc3M9ImNscy0xIiBkPSJNMCwwaDM3LjFsNDIuMTgsNTIuMzVWMGgzOS4zdjExOC41OWgtMzUuMjRsLTQ0LjA0LTU0LjcydjU0LjcySDBWMFoiLz4KICA8L2c+Cjwvc3ZnPgo=',
             position: 3,
         );
@@ -694,7 +695,7 @@ if (!$is_enabled && novamira_is_domain_mismatch()) {
         novamira_render_persistent_admin_notice(
             sprintf(
                 esc_html__(
-                    'Novamira AI Abilities were disabled because the site domain changed (enabled on %s). Re-enable them from the Configuration page if this is intentional.',
+                    'CILINK Agent AI Abilities were disabled because the site domain changed (enabled on %s). Re-enable them from the Configuration page if this is intentional.',
                     domain: 'novamira',
                 ),
                 '<code>' . esc_html($locked) . '</code>',
@@ -739,9 +740,9 @@ if ($is_enabled && $novamira_abilities_supported) {
         if (!is_array($config)) {
             return $config;
         }
-        $config['server_id'] = 'novamira';
-        $config['server_route'] = 'novamira';
-        $config['server_name'] = 'Novamira';
+        $config['server_id'] = 'cilink-agent';
+        $config['server_route'] = 'cilink-agent';
+        $config['server_name'] = 'CILINK Agent';
         return $config;
     });
 
@@ -761,7 +762,7 @@ if ($is_enabled && $novamira_abilities_supported) {
 }
 
 /**
- * Register a legacy alias of the canonical Novamira MCP server at the pre-rename slug.
+ * Register a legacy alias of the canonical CILINK Agent MCP server at the pre-rename slug.
  *
  * The canonical server is registered under `/mcp/novamira`. Older client configs may still
  * point at `/mcp/mcp-adapter-default-server` from before the rename — this alias keeps them
@@ -773,7 +774,7 @@ function novamira_register_legacy_mcp_server(mixed $adapter): void
         return;
     }
 
-    if ($adapter->get_server('novamira') === null) {
+    if ($adapter->get_server('cilink-agent') === null) {
         return;
     }
 
@@ -781,13 +782,13 @@ function novamira_register_legacy_mcp_server(mixed $adapter): void
         $adapter,
         server_id: 'mcp-adapter-default-server',
         route: 'mcp-adapter-default-server',
-        name: 'Novamira (legacy alias)',
-        description: 'Legacy alias for the Novamira MCP server. New client configurations should use /wp-json/mcp/novamira.',
+        name: 'CILINK Agent (compatibility alias)',
+        description: 'Legacy alias for the CILINK Agent MCP server. New client configurations should use /wp-json/mcp/cilink-agent.',
     );
 }
 
 /**
- * Register the OAuth-authenticated Novamira MCP server at `/mcp/novamira-oauth`.
+ * Register the OAuth-authenticated CILINK Agent MCP server at `/mcp/novamira-oauth`.
  *
  * The OAuth Bearer flow lives on this dedicated route so the canonical `/mcp/novamira` endpoint —
  * used by the existing Application Password installs — is never seen by the OAuth challenge
@@ -811,10 +812,10 @@ function novamira_register_oauth_mcp_server(mixed $adapter): void
 
     novamira_create_mirror_mcp_server(
         $adapter,
-        server_id: 'novamira-oauth',
-        route: 'novamira-oauth',
-        name: 'Novamira (OAuth)',
-        description: 'OAuth-authenticated Novamira MCP endpoint. Application Password clients use /wp-json/mcp/novamira.',
+        server_id: 'cilink-agent-oauth',
+        route: 'cilink-agent-oauth',
+        name: 'CILINK Agent (OAuth)',
+        description: 'OAuth-authenticated CILINK Agent MCP endpoint. Application Password clients use /wp-json/mcp/novamira.',
     );
 }
 
