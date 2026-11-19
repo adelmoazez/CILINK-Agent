@@ -402,7 +402,7 @@ function novamira_unbranded_site_name(string $site_name): string
 {
     $site_name = novamira_plain_site_name($site_name);
     $unbranded = preg_replace(
-        pattern: '/^novamira(?![\p{L}\p{N}])[\s\x{00A0}\x{2013}\x{2014}-]*/iu',
+        pattern: '/^(?:cilink\\s+agent|novamira)(?![\p{L}\p{N}])[\s\x{00A0}\x{2013}\x{2014}-]*/iu',
         replacement: '',
         subject: $site_name,
     );
