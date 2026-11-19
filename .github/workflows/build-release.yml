@@ -8,6 +8,8 @@ on:
         required: true
         type: string
   push:
+    branches:
+      - main
     tags:
       - "cilink-v*"
 
@@ -44,8 +46,7 @@ jobs:
           elif [[ "$GITHUB_REF_TYPE" == "tag" ]]; then
             VERSION="${GITHUB_REF_NAME#cilink-v}"
           else
-            echo "A version is required." >&2
-            exit 1
+            VERSION="1.12.16.1"
           fi
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
           echo "Building CILINK Agent $VERSION"
