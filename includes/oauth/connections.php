@@ -88,7 +88,7 @@ function render(): void
         return;
     }
     if (!\novamira_current_user_can_manage()) {
-        wp_die('You are not allowed to manage Novamira connections.', title: '', args: ['response' => 403]);
+        wp_die('You are not allowed to manage CILINK Agent connections.', title: '', args: ['response' => 403]);
         return;
     }
 
@@ -252,7 +252,7 @@ function render_page(int $user_id): void
     echo
         '<p>'
             . esc_html__(
-                'These apps are connected to your current WordPress user account through Novamira. Each connection renews automatically whenever the app reconnects. The date below is when access expires only if the app is not used again.',
+                'These apps are connected to your current WordPress user account through CILINK Agent. Each connection renews automatically whenever the app reconnects. The date below is when access expires only if the app is not used again.',
                 domain: 'novamira',
             )
             . '</p>'
@@ -407,7 +407,7 @@ function render_application_passwords_section(): void
     echo
         '<p>'
             . esc_html__(
-                'These WordPress Application Passwords belong to your current user account and do not expire. Revoke any Novamira credentials you no longer use.',
+                'These WordPress Application Passwords belong to your current user account and do not expire. Revoke any CILINK Agent credentials you no longer use.',
                 domain: 'novamira',
             )
             . '</p>'
@@ -415,7 +415,7 @@ function render_application_passwords_section(): void
 
     if ($passwords === []) {
         echo
-            '<p>' . esc_html__('No Novamira application passwords exist for your account.', domain: 'novamira') . '</p>'
+            '<p>' . esc_html__('No CILINK Agent application passwords exist for your account.', domain: 'novamira') . '</p>'
         ;
         echo '</section>';
         return;
