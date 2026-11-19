@@ -118,7 +118,7 @@ final class ConnectPageNameTest extends TestCase
         self::assertSame('', novamira_plain_site_name('&nbsp;'));
     }
 
-    public function testDefaultServerNameKeepsASingleNovamira(): void
+    public function testDefaultServerNameKeepsASingleCilinkPrefix(): void
     {
         self::assertSame('cilink-122-domain-com', self::serverNameForUrl('https://novamira122.domain.com/'));
         self::assertSame('cilink-yourdomainname-c', self::serverNameForUrl('https://novamira.yourdomainname.com/'));
