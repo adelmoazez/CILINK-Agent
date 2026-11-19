@@ -812,7 +812,7 @@ function novamira_render_settings_page()
                 <p class="description"><?php printf(
                     /* translators: %s: link to the Configuration page */
                     esc_html__(
-                        'Manage every ability exposed to AI agents. This lists abilities registered by Novamira and any other plugin that uses the WordPress Abilities API, grouped by provider. Disabled abilities are removed from registry discovery and MCP execution while AI Abilities are enabled on the %s page.',
+                        'Manage every ability exposed to AI agents. This lists abilities registered by CILINK Agent and any other plugin that uses the WordPress Abilities API, grouped by provider. Disabled abilities are removed from registry discovery and MCP execution while AI Abilities are enabled on the %s page.',
                         domain: 'novamira',
                     ),
                     '<a href="'
@@ -858,7 +858,7 @@ function novamira_render_ability_hub_result_notice(?string $result): void
         'managed' => [
             'info',
             __(
-                'This ability is managed by Novamira or by a feature and cannot be changed independently.',
+                'This ability is managed by CILINK Agent or by a feature and cannot be changed independently.',
                 domain: 'novamira',
             ),
         ],
@@ -876,7 +876,7 @@ function novamira_render_ability_hub_result_notice(?string $result): void
 }
 
 /**
- * Divider that separates Novamira's own abilities from those registered by
+ * Divider that separates CILINK Agent's own abilities from those registered by
  * other plugins, so a provider like "jet-engine" reads clearly as the plugin's.
  */
 function novamira_render_ability_other_plugins_divider(): void
@@ -964,13 +964,13 @@ function novamira_ability_managed_group_context(array $abilities): ?array
             domain: 'novamira',
         ),
         default => __(
-            'These abilities are managed by Novamira and cannot be selected individually. Manage their feature in Features.',
+            'These abilities are managed by CILINK Agent and cannot be selected individually. Manage their feature in Features.',
             domain: 'novamira',
         ),
     };
 
     return [
-        'label' => $managed_by_pro ? __('Novamira Pro', domain: 'novamira') : __('Novamira', domain: 'novamira'),
+        'label' => $managed_by_pro ? __('Novamira Pro', domain: 'novamira') : __('CILINK Agent', domain: 'novamira'),
         'reason' => $reason,
         'url' => novamira_ability_header_manage_url($abilities),
     ];
@@ -992,7 +992,7 @@ function novamira_render_ability_managed_owner_meta(array $abilities): void
     ><?php
 
     printf(
-        /* translators: %s: Novamira or Novamira Pro */
+        /* translators: %s: CILINK Agent or Novamira Pro */
         esc_html__('Managed by %s', domain: 'novamira'),
         esc_html($management['label']),
     );
@@ -1214,7 +1214,7 @@ function novamira_ability_row_management_label(array $ability): ?string
     if ($ability['infrastructure']) {
         return novamira_is_read_mode()
             ? __('Required by Read Mode', domain: 'novamira')
-            : __('Required by Novamira', domain: 'novamira');
+            : __('Required by CILINK Agent', domain: 'novamira');
     }
     if ($ability['manager_kind'] === 'specialization') {
         return __('Managed by Novamira Pro', domain: 'novamira');
@@ -1222,7 +1222,7 @@ function novamira_ability_row_management_label(array $ability): ?string
     if ($ability['managed_by_feature']) {
         return $ability['manager_provider'] === 'Novamira Pro'
             ? __('Managed by Novamira Pro', domain: 'novamira')
-            : __('Managed by Novamira', domain: 'novamira');
+            : __('Managed by CILINK Agent', domain: 'novamira');
     }
 
     return $ability['status'];
