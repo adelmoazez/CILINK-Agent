@@ -329,7 +329,7 @@ function send_www_authenticate(string $error): void
  */
 function is_mcp_route(string $route): bool
 {
-    return $route === '/mcp/novamira-oauth' || str_starts_with($route, '/mcp/novamira-oauth/');
+    return $route === '/mcp/cilink-agent-oauth' || str_starts_with($route, '/mcp/cilink-agent-oauth/');
 }
 
 /**
