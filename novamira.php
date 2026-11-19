@@ -13,7 +13,7 @@ declare(strict_types=1);
  * Version: 1.12.16.1
  * Requires at least: 6.9
  * Requires PHP: 8.0
- * Author: CILINK (derived from CILINK Agent Free)
+ * Author: CILINK (derived from Novamira Free)
  * Author URI: https://cilink.ir
  * License: AGPL-3.0-or-later
  * License URI: https://www.gnu.org/licenses/agpl-3.0.html
@@ -815,7 +815,7 @@ function novamira_register_oauth_mcp_server(mixed $adapter): void
         server_id: 'cilink-agent-oauth',
         route: 'cilink-agent-oauth',
         name: 'CILINK Agent (OAuth)',
-        description: 'OAuth-authenticated CILINK Agent MCP endpoint. Application Password clients use /wp-json/mcp/novamira.',
+        description: 'OAuth-authenticated CILINK Agent MCP endpoint. Application Password clients use /wp-json/mcp/cilink-agent.',
     );
 }
 
