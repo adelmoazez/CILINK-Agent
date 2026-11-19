@@ -86,7 +86,7 @@ function render(): void
         return;
     }
     if (!\novamira_current_user_can_manage()) {
-        wp_die('You are not allowed to authorize Novamira applications.', title: '', args: ['response' => 403]);
+        wp_die('You are not allowed to authorize CILINK Agent applications.', title: '', args: ['response' => 403]);
         return;
     }
 
