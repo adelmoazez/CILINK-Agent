@@ -86,7 +86,7 @@ function resolve_pending(): ?array
         return null;
     }
     if (!\novamira_current_user_can_manage()) {
-        wp_die('You are not allowed to authorize Novamira applications.', title: '', args: ['response' => 403]);
+        wp_die('You are not allowed to authorize CILINK Agent applications.', title: '', args: ['response' => 403]);
         return null;
     }
 
@@ -196,10 +196,10 @@ function render_post(string $token, array $pending, string $redirect_uri, string
         // The generic message below would hide the one failure an operator can act on: this site
         // has no OAuth signing key and its PHP cannot make one. The reason (OpenSSL error strings
         // and configuration paths, never key material) goes to the PHP error log.
-        error_log('Novamira OAuth: ' . $e->getMessage());
+        error_log('CILINK Agent OAuth: ' . $e->getMessage());
         wp_die(
             esc_html__(
-                'Novamira could not create the OAuth signing keys for this site. The PHP error log records the OpenSSL reason. Run "wp novamira oauth-keys generate" from WP-CLI to create the keys, then authorize again.',
+                'CILINK Agent could not create the OAuth signing keys for this site. The PHP error log records the OpenSSL reason. Run "wp novamira oauth-keys generate" from WP-CLI to create the keys, then authorize again.',
                 domain: 'novamira',
             ),
             title: '',
@@ -279,7 +279,7 @@ function consent_grant_details(string $scope): array
     return [
         'label' => __('full access to the REST API of your WordPress site', domain: 'novamira'),
         'description' => __(
-            'Full access lets the application use the whole REST API of this site with your user account and permissions, as an application password does. That includes Novamira abilities through MCP and REST, and REST-visible abilities registered by compatible third-party plugins. It does not sign the application in to the WordPress dashboard or other pages.',
+            'Full access lets the application use the whole REST API of this site with your user account and permissions, as an application password does. That includes CILINK Agent abilities through MCP and REST, and REST-visible abilities registered by compatible third-party plugins. It does not sign the application in to the WordPress dashboard or other pages.',
             domain: 'novamira',
         ),
         'risks' => [
