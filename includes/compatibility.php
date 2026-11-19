@@ -48,7 +48,7 @@ function novamira_wordpress_version(): string
 }
 
 /**
- * Whether this WordPress installation has the minimum Abilities API generation Novamira supports.
+ * Whether this WordPress installation has the minimum Abilities API generation CILINK Agent supports.
  */
 function novamira_wordpress_abilities_supported(?string $wordpress_version = null): bool
 {
@@ -105,7 +105,7 @@ function novamira_render_wordpress_compatibility_notice(): void
     wp_admin_notice(
         sprintf(
             esc_html__(
-                'Novamira requires WordPress %1$s or newer for the Abilities API. WordPress %2$s is installed, so Novamira Ability and REST registration is disabled.',
+                'CILINK Agent requires WordPress %1$s or newer for the Abilities API. WordPress %2$s is installed, so CILINK Agent Ability and REST registration is disabled.',
                 domain: 'novamira',
             ),
             esc_html(NOVAMIRA_MINIMUM_WORDPRESS_VERSION),
