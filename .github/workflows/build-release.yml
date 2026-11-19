@@ -1,0 +1,79 @@
+name: Build CILINK Agent
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version number for the installable ZIP (for example 1.12.16.1)"
+        required: true
+        type: string
+  push:
+    tags:
+      - "cilink-v*"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up PHP and Composer
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+          tools: composer:v2
+          extensions: curl, intl, mbstring, openssl, sodium, zip
+
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Resolve package version
+        id: version
+        shell: bash
+        env:
+          REQUESTED_VERSION: ${{ inputs.version }}
+        run: |
+          if [[ -n "$REQUESTED_VERSION" ]]; then
+            VERSION="$REQUESTED_VERSION"
+          elif [[ "$GITHUB_REF_TYPE" == "tag" ]]; then
+            VERSION="${GITHUB_REF_NAME#cilink-v}"
+          else
+            echo "A version is required." >&2
+            exit 1
+          fi
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "Building CILINK Agent $VERSION"
+
+      - name: Validate Composer manifest
+        run: composer validate --no-check-publish
+
+      - name: Check PHP syntax
+        shell: bash
+        run: |
+          find . -type f -name '*.php' -not -path './vendor/*' -print0 | xargs -0 -n1 php -l
+
+      - name: Build installable plugin ZIP
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: ./build/build "$VERSION"
+
+      - name: Upload ZIP artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: cilink-agent-${{ steps.version.outputs.version }}
+          path: /tmp/cilink-agent-${{ steps.version.outputs.version }}.zip
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Attach ZIP to GitHub Release
+        if: github.ref_type == 'tag'
+        uses: softprops/action-gh-release@v2
+        with:
+          files: /tmp/cilink-agent-${{ steps.version.outputs.version }}.zip
+          generate_release_notes: true
