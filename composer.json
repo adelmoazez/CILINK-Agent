@@ -1,6 +1,6 @@
 {
-	"name": "use-novamira/novamira",
-	"description": "Novamira",
+	"name": "cilink/agent",
+	"description": "CILINK Agent - independent WordPress MCP and OAuth plugin",
 	"type": "wordpress-plugin",
 	"license": "AGPL-3.0-or-later",
 	"require": {
