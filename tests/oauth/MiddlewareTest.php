@@ -376,9 +376,9 @@ final class MiddlewareTest extends TestCase
 
     public function testMcpRouteMatchesOnlyTheOauthServer(): void
     {
-        self::assertTrue(\Novamira\OAuth\Middleware\is_mcp_route('/mcp/novamira-oauth'));
-        self::assertTrue(\Novamira\OAuth\Middleware\is_mcp_route('/mcp/novamira-oauth/tools/list'));
-        self::assertFalse(\Novamira\OAuth\Middleware\is_mcp_route('/mcp/novamira'));
+        self::assertTrue(\Novamira\OAuth\Middleware\is_mcp_route('/mcp/cilink-agent-oauth'));
+        self::assertTrue(\Novamira\OAuth\Middleware\is_mcp_route('/mcp/cilink-agent-oauth/tools/list'));
+        self::assertFalse(\Novamira\OAuth\Middleware\is_mcp_route('/mcp/cilink-agent'));
         self::assertFalse(\Novamira\OAuth\Middleware\is_mcp_route('/mcp/mcp-adapter-default-server'));
     }
 
@@ -550,7 +550,7 @@ final class MiddlewareTest extends TestCase
     #[PreserveGlobalState(false)]
     public function testResourceIdentifierFailureIsContained(): void
     {
-        $token = $this->jwtForAudience('https://example.test/wp-json/mcp/novamira-oauth');
+        $token = $this->jwtForAudience('https://example.test/wp-json/mcp/cilink-agent-oauth');
         $GLOBALS['novamira_test_rest_url_throws'] = true;
         $called = false;
         $resolved = \Novamira\OAuth\Middleware\resolve_bearer_identity_using(
@@ -639,9 +639,9 @@ final class MiddlewareTest extends TestCase
         yield 'third-party globals' => ['GET', '/elementor/v1/globals'];
         yield 'upload' => ['POST', '/novamira/v1/upload/example'];
         yield 'temporary administrator' => ['POST', '/novamira/v1/admin-access'];
-        yield 'canonical Application Password MCP' => ['POST', '/mcp/novamira'];
+        yield 'canonical Application Password MCP' => ['POST', '/mcp/cilink-agent'];
         yield 'legacy MCP' => ['POST', '/mcp/mcp-adapter-default-server'];
-        yield 'OAuth MCP' => ['POST', '/mcp/novamira-oauth'];
+        yield 'OAuth MCP' => ['POST', '/mcp/cilink-agent-oauth'];
         yield 'ability run' => ['POST', '/novamira/v1/abilities/novamira/write-file/run'];
     }
 
@@ -767,7 +767,7 @@ final class MiddlewareTest extends TestCase
         $this->authenticateOauthUser(['mcp']);
 
         foreach ([
-            new WP_REST_Request('POST', '/mcp/novamira-oauth'),
+            new WP_REST_Request('POST', '/mcp/cilink-agent-oauth'),
             new WP_REST_Request('GET', '/wp-abilities/v1/abilities'),
             new WP_REST_Request('GET', '/wp-abilities/v1/abilities/novamira/read-file'),
             new WP_REST_Request('POST', '/novamira/v1/abilities/novamira/read-file/run'),
@@ -782,7 +782,7 @@ final class MiddlewareTest extends TestCase
     {
         foreach (['full_access', 'mcp', 'abilities', 'abilities:read', 'read', 'write'] as $scope) {
             foreach ([
-                new WP_REST_Request('POST', '/mcp/novamira-oauth'),
+                new WP_REST_Request('POST', '/mcp/cilink-agent-oauth'),
                 new WP_REST_Request('POST', '/novamira/v1/abilities/novamira/write-file/run'),
                 new WP_REST_Request('POST', '/wp/v2/posts'),
             ] as $request) {
@@ -798,7 +798,7 @@ final class MiddlewareTest extends TestCase
             ['GET', '/wp-abilities/v1/abilities'],
             ['POST', '/novamira/v1/abilities/novamira/read-file/run'],
             ['POST', '/novamira/v1/abilities/novamira/write-file/run'],
-            ['POST', '/mcp/novamira-oauth'],
+            ['POST', '/mcp/cilink-agent-oauth'],
         ] as [$method, $route]) {
             self::assertTrue(\Novamira\OAuth\Middleware\is_oauth_challenge_route($route, $method));
         }
@@ -823,13 +823,13 @@ final class MiddlewareTest extends TestCase
         $denial = \Novamira\OAuth\Middleware\challenge_unauthenticated(
             null,
             null,
-            new WP_REST_Request('POST', '/mcp/novamira-oauth'),
+            new WP_REST_Request('POST', '/mcp/cilink-agent-oauth'),
         );
         self::assertInstanceOf(WP_Error::class, $denial);
         self::assertSame('rest_oauth_required', $denial->get_error_code());
         self::assertSame(401, $denial->get_error_data()['status']);
 
-        $response = $this->dispatchAgainstDenyingPermissionCallback(new WP_REST_Request('POST', '/mcp/novamira-oauth'));
+        $response = $this->dispatchAgainstDenyingPermissionCallback(new WP_REST_Request('POST', '/mcp/cilink-agent-oauth'));
         self::assertInstanceOf(WP_REST_Response::class, $response);
         self::assertSame(401, $response->status);
         self::assertSame('rest_oauth_required', $response->data['code']);
@@ -850,7 +850,7 @@ final class MiddlewareTest extends TestCase
             is_rest_request: true,
         );
 
-        $response = $this->dispatchAgainstDenyingPermissionCallback(new WP_REST_Request('POST', '/mcp/novamira-oauth'));
+        $response = $this->dispatchAgainstDenyingPermissionCallback(new WP_REST_Request('POST', '/mcp/cilink-agent-oauth'));
 
         self::assertInstanceOf(WP_REST_Response::class, $response);
         self::assertSame(401, $response->status);
@@ -866,7 +866,7 @@ final class MiddlewareTest extends TestCase
         $_SERVER['HTTP_AUTHORIZATION'] = 'Bearer ';
         self::assertFalse(\Novamira\OAuth\Middleware\resolve_bearer_identity(false));
 
-        $response = $this->dispatchAgainstDenyingPermissionCallback(new WP_REST_Request('POST', '/mcp/novamira-oauth'));
+        $response = $this->dispatchAgainstDenyingPermissionCallback(new WP_REST_Request('POST', '/mcp/cilink-agent-oauth'));
 
         self::assertInstanceOf(WP_REST_Response::class, $response);
         self::assertSame(401, $response->status);
@@ -901,7 +901,7 @@ final class MiddlewareTest extends TestCase
 
     public function testChallengeAttachmentLeavesUnrelatedResultsUntouched(): void
     {
-        $request = new WP_REST_Request('POST', '/mcp/novamira-oauth');
+        $request = new WP_REST_Request('POST', '/mcp/cilink-agent-oauth');
 
         $success = new WP_REST_Response(['ok' => true]);
         self::assertSame(
@@ -926,7 +926,7 @@ final class MiddlewareTest extends TestCase
         self::assertNull(\Novamira\OAuth\Middleware\challenge_unauthenticated(
             null,
             null,
-            new WP_REST_Request('POST', '/mcp/novamira'),
+            new WP_REST_Request('POST', '/mcp/cilink-agent'),
         ));
         self::assertNull(\Novamira\OAuth\Middleware\challenge_unauthenticated(
             null,
