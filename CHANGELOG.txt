@@ -1,3 +1,10 @@
+CILINK Agent 1.12.16.1 - 2026/11/19
+* New downstream distribution name and CILINK-branded WordPress admin screens.
+* Keep the inherited Novamira Free MCP and OAuth implementation; publish CILINK-specific MCP resource endpoints.
+* Disable the upstream Novamira license-server update lookup and Pro promotional screen.
+* Add a GitHub Actions build that runs PHPUnit/PHP syntax checks and packages Composer dependencies into an installable ZIP.
+* Retain upstream AGPL-3.0-or-later license notices and source attribution.
+
 Unreleased
 * Fix: Other plugins that bundle the WordPress MCP Adapter no longer log "WordPress ability 'mcp-adapter/...' does not exist" errors while Novamira is active.
 * Fix: MCP servers of other plugins that bundle a current version of the WordPress MCP Adapter no longer list, describe or run Novamira's abilities and skill prompts. Novamira's abilities stay available through Novamira's own MCP server.
