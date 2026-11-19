@@ -24,26 +24,26 @@ final class ConnectPageNameTest extends TestCase
     public function testRootSiteRetainsHostOnlyDefault(): void
     {
         self::assertSame(
-            'novamira-averylongexample',
+            'cilink-averylongexample',
             self::serverNameForUrl('https://www.averylongexample.com/'),
         );
         self::assertSame(
-            'novamira-averylongexample',
+            'cilink-averylongexample',
             self::serverNameForUrl('https://www.averylongexample.com'),
         );
     }
 
     public function testRootSiteRetainsLegacyNormalizationEdgeCases(): void
     {
-        self::assertSame('novamira-www-example-com', self::serverNameForUrl('https://WWW.Example.COM/'));
-        self::assertSame('novamira-192-0-2-1', self::serverNameForUrl('http://192.0.2.1:8080/'));
-        self::assertSame('novamira-abcdefghijklmno', self::serverNameForUrl('https://abcdefghijklmno.example/'));
-        self::assertSame('novamira-xn--mnchen-3ya-d', self::serverNameForUrl('https://xn--mnchen-3ya.de/'));
+        self::assertSame('cilink-www-example-com', self::serverNameForUrl('https://WWW.Example.COM/'));
+        self::assertSame('cilink-192-0-2-1', self::serverNameForUrl('http://192.0.2.1:8080/'));
+        self::assertSame('cilink-abcdefghijklmno', self::serverNameForUrl('https://abcdefghijklmno.example/'));
+        self::assertSame('cilink-xn--mnchen-3ya-d', self::serverNameForUrl('https://xn--mnchen-3ya.de/'));
     }
 
     public function testShortSubdirectoryIsIncludedInDefault(): void
     {
-        self::assertSame('novamira-example-com-shop', self::serverNameForUrl('https://www.example.com/shop/'));
+        self::assertSame('cilink-example-com-shop', self::serverNameForUrl('https://www.example.com/shop/'));
     }
 
     public function testLongSubdirectoriesUseDifferentBoundedDefaults(): void
@@ -54,8 +54,8 @@ final class ConnectPageNameTest extends TestCase
         self::assertNotSame($first, $second);
         self::assertLessThanOrEqual(25, strlen($first));
         self::assertLessThanOrEqual(25, strlen($second));
-        self::assertMatchesRegularExpression('/^novamira-[a-z0-9]+(?:-[a-z0-9]+)*$/', $first);
-        self::assertMatchesRegularExpression('/^novamira-[a-z0-9]+(?:-[a-z0-9]+)*$/', $second);
+        self::assertMatchesRegularExpression('/^cilink-[a-z0-9]+(?:-[a-z0-9]+)*$/', $first);
+        self::assertMatchesRegularExpression('/^cilink-[a-z0-9]+(?:-[a-z0-9]+)*$/', $second);
         self::assertSame($first, self::serverNameForUrl('https://www.example.com/very-long-storefront-one'));
     }
 
@@ -85,9 +85,9 @@ final class ConnectPageNameTest extends TestCase
 
     public function testSubdirectorySlugCollapsesHyphenRuns(): void
     {
-        self::assertSame('novamira-ex-com-my-shop', self::serverNameForUrl('http://ex.com/my-_shop'));
+        self::assertSame('cilink-ex-com-my-shop', self::serverNameForUrl('http://ex.com/my-_shop'));
         self::assertSame(
-            'novamira-xn-mnchen-e61052',
+            'cilink-xn-mnchen-e61052',
             self::serverNameForUrl('http://xn--mnchen-3ya.de/blog'),
         );
     }
@@ -95,19 +95,19 @@ final class ConnectPageNameTest extends TestCase
     public function testStoredHomeOptionWinsOverFilteredHomeUrl(): void
     {
         self::assertSame(
-            'novamira-example-com',
+            'cilink-example-com',
             self::serverNameFromWordPressUrls('https://example.com/', 'https://example.com/de/'),
         );
         self::assertSame(
-            'novamira-example-com-shop',
+            'cilink-example-com-shop',
             self::serverNameFromWordPressUrls('not a URL', 'https://example.com/shop/'),
         );
         self::assertSame(
-            'novamira-example-com-shop',
+            'cilink-example-com-shop',
             self::serverNameFromWordPressUrls('', 'https://example.com/shop/'),
         );
         self::assertSame(
-            'novamira-example-com',
+            'cilink-example-com',
             self::serverNameFromWordPressUrls('https://example.com/', 'https://example.com'),
         );
     }
@@ -120,11 +120,11 @@ final class ConnectPageNameTest extends TestCase
 
     public function testDefaultServerNameKeepsASingleNovamira(): void
     {
-        self::assertSame('novamira-122-domain-com', self::serverNameForUrl('https://novamira122.domain.com/'));
-        self::assertSame('novamira-yourdomainname-c', self::serverNameForUrl('https://novamira.yourdomainname.com/'));
+        self::assertSame('cilink-122-domain-com', self::serverNameForUrl('https://novamira122.domain.com/'));
+        self::assertSame('cilink-yourdomainname-c', self::serverNameForUrl('https://novamira.yourdomainname.com/'));
         self::assertSame(
-            'novamira-visual-122-domai',
-            novamira_build_mcp_server_name_default('novamira122.domain.com', null, '', prefix: 'novamira-visual-'),
+            'cilink-visual-122-domai',
+            novamira_build_mcp_server_name_default('novamira122.domain.com', null, '', prefix: 'cilink-visual-'),
         );
     }
 
