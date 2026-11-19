@@ -19,7 +19,7 @@ final class ConnectorLinkTest extends TestCase
         self::assertSame(
             'https://claude.ai/customize/connectors?modal=add-custom-connector'
             . '&connectorName=CILINK%20Agent%20-%20My%20Site'
-            . '&connectorUrl=https%3A%2F%2Fexample.com%2Fwp-json%2Fmcp%2Fnovamira',
+            . '&connectorUrl=https%3A%2F%2Fexample.com%2Fwp-json%2Fmcp%2Fcilink-agent',
             $link,
         );
     }
