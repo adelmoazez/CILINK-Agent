@@ -23,12 +23,12 @@ final class DiscoveryPathsTest extends TestCase
     {
         $paths = discovery_paths(
             'https://example.test',
-            'https://example.test/wp-json/mcp/novamira-oauth',
+            'https://example.test/wp-json/mcp/cilink-agent-oauth',
         );
 
         self::assertContains('/.well-known/oauth-protected-resource', $paths['protected_resource']);
         self::assertContains(
-            '/.well-known/oauth-protected-resource/wp-json/mcp/novamira-oauth',
+            '/.well-known/oauth-protected-resource/wp-json/mcp/cilink-agent-oauth',
             $paths['protected_resource'],
         );
         self::assertContains('/.well-known/oauth-authorization-server', $paths['authorization_server']);
@@ -39,7 +39,7 @@ final class DiscoveryPathsTest extends TestCase
     {
         $paths = discovery_paths(
             'https://example.com/subsite',
-            'https://example.com/subsite/wp-json/mcp/novamira-oauth',
+            'https://example.com/subsite/wp-json/mcp/cilink-agent-oauth',
         );
 
         // The exact URL the WWW-Authenticate challenge advertises (home_url() + the well-known path)
@@ -47,7 +47,7 @@ final class DiscoveryPathsTest extends TestCase
         self::assertContains('/subsite/.well-known/oauth-protected-resource', $paths['protected_resource']);
         // The canonical RFC 9728 insert form, at the domain root, is also offered.
         self::assertContains(
-            '/.well-known/oauth-protected-resource/subsite/wp-json/mcp/novamira-oauth',
+            '/.well-known/oauth-protected-resource/subsite/wp-json/mcp/cilink-agent-oauth',
             $paths['protected_resource'],
         );
     }
@@ -56,7 +56,7 @@ final class DiscoveryPathsTest extends TestCase
     {
         $paths = discovery_paths(
             'https://example.com/subsite',
-            'https://example.com/subsite/wp-json/mcp/novamira-oauth',
+            'https://example.com/subsite/wp-json/mcp/cilink-agent-oauth',
         );
 
         // A spec-compliant client falls back to the OIDC append form, which this install can serve
@@ -77,7 +77,7 @@ final class DiscoveryPathsTest extends TestCase
     {
         $paths = discovery_paths(
             'https://example.com/subsite',
-            'https://example.com/subsite/wp-json/mcp/novamira-oauth',
+            'https://example.com/subsite/wp-json/mcp/cilink-agent-oauth',
         );
 
         // Exact matching, not str_starts_with: a metadata URL for some other resource on the same
@@ -97,7 +97,7 @@ final class DiscoveryPathsTest extends TestCase
     {
         $paths = discovery_paths(
             'https://example.com/subsite',
-            'https://example.com/subsite/wp-json/mcp/novamira-oauth',
+            'https://example.com/subsite/wp-json/mcp/cilink-agent-oauth',
         );
 
         self::assertSame($expected, document_for_path($path, $paths));
@@ -112,7 +112,7 @@ final class DiscoveryPathsTest extends TestCase
             'protected_resource',
         ];
         yield 'protected resource insert form, trailing slash' => [
-            '/.well-known/oauth-protected-resource/subsite/wp-json/mcp/novamira-oauth/',
+            '/.well-known/oauth-protected-resource/subsite/wp-json/mcp/cilink-agent-oauth/',
             'protected_resource',
         ];
         yield 'openid configuration' => ['/subsite/.well-known/openid-configuration', 'authorization_server'];
@@ -135,7 +135,7 @@ final class DiscoveryPathsTest extends TestCase
     {
         $paths = discovery_paths(
             'https://example.test',
-            'https://example.test/wp-json/mcp/novamira-oauth',
+            'https://example.test/wp-json/mcp/cilink-agent-oauth',
         );
 
         // With an empty home path the append and insert forms of the authorization server collapse
@@ -150,7 +150,7 @@ final class DiscoveryPathsTest extends TestCase
     {
         $probes = discovery_probes(
             'https://example.test',
-            'https://example.test/wp-json/mcp/novamira-oauth',
+            'https://example.test/wp-json/mcp/cilink-agent-oauth',
         );
 
         $by_url = [];
@@ -163,7 +163,7 @@ final class DiscoveryPathsTest extends TestCase
         self::assertSame('required', $by_url['https://example.test/.well-known/oauth-protected-resource']['requirement']);
         self::assertSame(
             'optional',
-            $by_url['https://example.test/.well-known/oauth-protected-resource/wp-json/mcp/novamira-oauth']['requirement'],
+            $by_url['https://example.test/.well-known/oauth-protected-resource/wp-json/mcp/cilink-agent-oauth']['requirement'],
         );
         // OAuth and OIDC authorization-server metadata are interchangeable members of one group.
         self::assertSame('any', $by_url['https://example.test/.well-known/oauth-authorization-server']['requirement']);
@@ -182,7 +182,7 @@ final class DiscoveryPathsTest extends TestCase
     {
         $probes = discovery_probes(
             'https://example.com/subsite',
-            'https://example.com/subsite/wp-json/mcp/novamira-oauth',
+            'https://example.com/subsite/wp-json/mcp/cilink-agent-oauth',
         );
 
         $by_url = [];
@@ -198,7 +198,7 @@ final class DiscoveryPathsTest extends TestCase
         // Its canonical insert form lands on the domain root, so it is informational here.
         self::assertSame(
             'optional',
-            $by_url['https://example.com/.well-known/oauth-protected-resource/subsite/wp-json/mcp/novamira-oauth'][
+            $by_url['https://example.com/.well-known/oauth-protected-resource/subsite/wp-json/mcp/cilink-agent-oauth'][
                 'requirement'
             ],
         );
@@ -221,7 +221,7 @@ final class DiscoveryPathsTest extends TestCase
     {
         $probes = discovery_probes(
             'https://example.com/subsite',
-            'https://example.com/subsite/wp-json/mcp/novamira-oauth',
+            'https://example.com/subsite/wp-json/mcp/cilink-agent-oauth',
         );
 
         foreach ($probes as $probe) {
@@ -243,12 +243,12 @@ final class DiscoveryPathsTest extends TestCase
     {
         $probes = discovery_probes(
             'https://example.com/subsite',
-            'https://example.com/subsite/wp-json/mcp/novamira-oauth',
+            'https://example.com/subsite/wp-json/mcp/cilink-agent-oauth',
         );
 
         foreach ($probes as $probe) {
             if ($probe['field'] === 'resource') {
-                self::assertSame('https://example.com/subsite/wp-json/mcp/novamira-oauth', $probe['expected']);
+                self::assertSame('https://example.com/subsite/wp-json/mcp/cilink-agent-oauth', $probe['expected']);
                 continue;
             }
             self::assertSame('issuer', $probe['field']);
