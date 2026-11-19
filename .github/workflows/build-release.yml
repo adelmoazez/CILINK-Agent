@@ -53,6 +53,12 @@ jobs:
       - name: Validate Composer manifest
         run: composer validate --no-check-publish
 
+      - name: Install dependencies for tests
+        run: composer install --prefer-dist --no-interaction
+
+      - name: Run automated test suite
+        run: vendor/bin/phpunit
+
       - name: Check PHP syntax
         shell: bash
         run: |
