@@ -59,7 +59,7 @@ function resource_identifier(): string
         $GLOBALS['wp_rewrite'] = new \WP_Rewrite();
     }
 
-    return rest_url('mcp/cilink-agent-oauth);
+    return rest_url('mcp/cilink-agent-oauth');
 }
 
 /**
