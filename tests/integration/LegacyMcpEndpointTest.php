@@ -62,8 +62,8 @@ final class LegacyMcpEndpointTest extends TestCase
         foreach ([[$public, $options, $ours], [$ours, $public, $options]] as $handlers) {
             $endpoints = [
                 self::ROUTE => $handlers + $metadata,
-                '/mcp/novamira' => [$ours],
-                '/mcp/novamira-oauth' => [$ours],
+                '/mcp/cilink-agent' => [$ours],
+                '/mcp/cilink-agent-oauth' => [$ours],
                 '/mcp/rank-math-oauth' => [$public],
             ];
             $filtered = apply_filters('rest_endpoints', $endpoints);
@@ -72,7 +72,7 @@ final class LegacyMcpEndpointTest extends TestCase
             foreach (['GET', 'POST', 'DELETE'] as $method) {
                 self::assertTrue($filtered[self::ROUTE][0]['methods'][$method]);
             }
-            foreach (['/mcp/novamira', '/mcp/novamira-oauth', '/mcp/rank-math-oauth'] as $route) {
+            foreach (['/mcp/cilink-agent', '/mcp/cilink-agent-oauth', '/mcp/rank-math-oauth'] as $route) {
                 self::assertSame($endpoints[$route], $filtered[$route]);
             }
             self::assertSame($filtered, apply_filters('rest_endpoints', $filtered));
@@ -118,7 +118,7 @@ final class LegacyMcpEndpointTest extends TestCase
         self::assertNull(apply_filters('rest_request_before_callbacks', null, $this->novamiraHandler(), $request));
         $instructions = novamira_build_agent_context()['instructions'];
         self::assertStringContainsString('Connection notice:', $instructions);
-        self::assertStringContainsString('https://example.test/wp-json/mcp/novamira', $instructions);
+        self::assertStringContainsString('https://example.test/wp-json/mcp/cilink-agent', $instructions);
         self::assertStringEndsWith($baseline, $instructions);
         self::assertSame($instructions, novamira_execute_discover_abilities()['novamira_instructions']);
 
@@ -129,8 +129,8 @@ final class LegacyMcpEndpointTest extends TestCase
 
     public static function otherRequests(): iterable
     {
-        yield 'canonical' => ['/mcp/novamira', true, true];
-        yield 'OAuth' => ['/mcp/novamira-oauth', true, true];
+        yield 'canonical' => ['/mcp/cilink-agent', true, true];
+        yield 'OAuth' => ['/mcp/cilink-agent-oauth', true, true];
         yield 'REST abilities' => ['/wp-abilities/v1/abilities/novamira/agent-context/run', true, true];
         yield 'public adapter on old URL' => [self::ROUTE, false, true];
         yield 'disabled' => [self::ROUTE, true, false];
@@ -169,7 +169,7 @@ final class LegacyMcpEndpointTest extends TestCase
         $GLOBALS['test_rest_base'] = 'https://example.test/subdirectory/?rest_route=/';
         apply_filters('rest_request_before_callbacks', null, $this->novamiraHandler(), new WP_REST_Request('POST', self::ROUTE));
         self::assertStringContainsString(
-            'https://example.test/subdirectory/?rest_route=/mcp/novamira',
+            'https://example.test/subdirectory/?rest_route=/mcp/cilink-agent',
             novamira_legacy_mcp_connection_notice(),
         );
     }
