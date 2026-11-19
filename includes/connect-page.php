@@ -1860,10 +1860,10 @@ function novamira_render_connect_client_section(
 ): void {
     $password_active = novamira_password_method_preselected($new_password, $existing_password, $existing_error);
     $has_password = $new_password !== null || $existing_password !== null;
-    $rest_url = rest_url('mcp/novamira');
+    $rest_url = rest_url('mcp/cilink-agent');
     // OAuth lives on its own MCP server so the canonical route above stays Application-Password-only
     // and untouched by the OAuth challenge. See novamira_register_oauth_mcp_server().
-    $oauth_rest_url = rest_url('mcp/novamira-oauth');
+    $oauth_rest_url = rest_url('mcp/cilink-agent-oauth');
     $username = wp_get_current_user()->user_login;
     $display_password = $new_password ?? $existing_password ?? 'YOUR-APP-PASSWORD';
     ?>
