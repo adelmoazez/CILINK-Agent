@@ -387,12 +387,12 @@ function novamira_build_connector_install_link(string $mcp_url, string $connecto
 }
 
 /**
- * Human-readable connector name shown in Claude. Empty site name falls back to "Novamira".
+ * Human-readable connector name shown in Claude. Empty site name falls back to "CILINK Agent".
  */
 function novamira_build_connector_display_name(string $site_name): string
 {
     $site_name = novamira_unbranded_site_name($site_name);
-    return $site_name !== '' ? 'Novamira - ' . $site_name : 'Novamira';
+    return $site_name !== '' ? 'CILINK Agent - ' . $site_name : 'CILINK Agent';
 }
 
 /**
@@ -582,7 +582,7 @@ function novamira_oauth_grok_steps(string $mcp_name, string $mcp_url): array
         [
             'title' => __('Add a custom connector', domain: 'novamira'),
             'body' => __(
-                'Click "New connector", choose "Custom", and give it this name, or one you’ll recognize with "Novamira" in it:',
+                'Click "New connector", choose "Custom", and give it this name, or one you’ll recognize with "CILINK Agent" in it:',
                 domain: 'novamira',
             ),
             'copy' => $mcp_name,
