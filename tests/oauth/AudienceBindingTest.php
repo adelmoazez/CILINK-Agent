@@ -51,8 +51,8 @@ final class AudienceBindingTest extends TestCase
         self::assertTrue(resource_request_allowed('', $expected));
         self::assertTrue(resource_request_allowed($expected, $expected));
         self::assertTrue(resource_request_allowed($expected . '/', $expected));
-        self::assertFalse(resource_request_allowed('https://evil.test/wp-json/mcp/novamira-oauth', $expected));
-        self::assertFalse(resource_request_allowed('https://example.test/wp-json/mcp/novamira', $expected));
+        self::assertFalse(resource_request_allowed('https://evil.test/wp-json/mcp/cilink-agent-oauth', $expected));
+        self::assertFalse(resource_request_allowed('https://example.test/wp-json/mcp/cilink-agent', $expected));
     }
 
     public function testAccessTokenAudienceIsTheResourceNotTheClient(): void
