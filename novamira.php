@@ -750,8 +750,8 @@ if ($is_enabled && $novamira_abilities_supported) {
     // /wp-json/mcp/mcp-adapter-default-server keep working after the rename.
     add_action('novamira_mcp_adapter_init', callback: 'novamira_register_legacy_mcp_server', priority: 20);
 
-    // Register the OAuth-only server at /mcp/novamira-oauth. Keeping the OAuth Bearer flow on a
-    // route of its own means the OAuth middleware never touches the canonical /mcp/novamira
+    // Register the OAuth-only server at /mcp/cilink-agent-oauth. Keeping the OAuth Bearer flow on a
+    // route of its own means the OAuth middleware never touches the canonical /mcp/cilink-agent
     // endpoint that the existing Application Password installs use. Gated on the same transport
     // check as the OAuth bootstrap so the endpoint never exists without its token/authorize peers.
     add_action('novamira_mcp_adapter_init', callback: 'novamira_register_oauth_mcp_server', priority: 20);
@@ -764,7 +764,7 @@ if ($is_enabled && $novamira_abilities_supported) {
 /**
  * Register a legacy alias of the canonical CILINK Agent MCP server at the pre-rename slug.
  *
- * The canonical server is registered under `/mcp/novamira`. Older client configs may still
+ * The canonical server is registered under `/mcp/cilink-agent`. Older client configs may still
  * point at `/mcp/mcp-adapter-default-server` from before the rename — this alias keeps them
  * working with identical behavior (same tools, same auto-discovered resources and prompts).
  */
@@ -788,9 +788,9 @@ function novamira_register_legacy_mcp_server(mixed $adapter): void
 }
 
 /**
- * Register the OAuth-authenticated CILINK Agent MCP server at `/mcp/novamira-oauth`.
+ * Register the OAuth-authenticated CILINK Agent MCP server at `/mcp/cilink-agent-oauth`.
  *
- * The OAuth Bearer flow lives on this dedicated route so the canonical `/mcp/novamira` endpoint —
+ * The OAuth Bearer flow lives on this dedicated route so the canonical `/mcp/cilink-agent` endpoint —
  * used by the existing Application Password installs — is never seen by the OAuth challenge
  * middleware (see includes/oauth/middleware.php::is_mcp_route). Registered only when the OAuth
  * transport is permitted, mirroring includes/oauth/bootstrap.php so the endpoint never exists
