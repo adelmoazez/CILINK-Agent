@@ -2232,7 +2232,7 @@ function novamira_handle_download_mcpb(): void
     }
 
     $username = wp_get_current_user()->user_login;
-    $rest_url = rest_url('mcp/novamira');
+    $rest_url = rest_url('mcp/cilink-agent');
 
     $raw_name = $_POST['novamira_mcpb_name'] ?? '';
     $mcp_name = is_string($raw_name)
