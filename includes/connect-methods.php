@@ -396,7 +396,7 @@ function novamira_build_connector_display_name(string $site_name): string
 }
 
 /**
- * Plain site name without a leading "Novamira", for names that already start with it.
+ * Plain site name without a leading CILINK Agent or legacy Novamira brand.
  */
 function novamira_unbranded_site_name(string $site_name): string
 {
@@ -797,7 +797,7 @@ function novamira_oauth_connector_steps(string $app_label, string $mcp_name, str
         [
             'title' => __('Add a custom connector', domain: 'novamira'),
             'body' => __(
-                'Click "Add custom connector" and give it this name, or one you’ll recognize with "Novamira" in it:',
+                'Click "Add custom connector" and give it this name, or one you’ll recognize with "CILINK Agent" in it:',
                 domain: 'novamira',
             ),
             'copy' => $mcp_name,
