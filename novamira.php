@@ -42,7 +42,7 @@ require_once __DIR__ . '/includes/compatibility.php';
 
 define(constant_name: 'NOVAMIRA_MAX_EXECUTION_TIME', value: 30);
 define('NOVAMIRA_PLUGIN_URL', plugin_dir_url(__FILE__));
-define('NOVAMIRA_SANDBOX_DIR', WP_CONTENT_DIR . '/novamira-sandbox/');
+define('NOVAMIRA_SANDBOX_DIR', WP_CONTENT_DIR . '/cilink-agent-sandbox/');
 define(constant_name: 'NOVAMIRA_VENDOR_AUTOLOAD', value: __DIR__ . '/vendor/autoload_packages.php');
 define(constant_name: 'NOVAMIRA_MCP_AUTOLOAD', value: __DIR__ . '/vendor/novamira/mcp-adapter/autoload.php');
 define(constant_name: 'NOVAMIRA_MCP_ADAPTER_CLASS', value: 'Novamira\\Vendor\\WP\\MCP\\Core\\McpAdapter');
